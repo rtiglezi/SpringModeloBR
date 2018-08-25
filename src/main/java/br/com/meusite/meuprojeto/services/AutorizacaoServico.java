@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.meusite.meuprojeto.domain.Usuario;
 import br.com.meusite.meuprojeto.repositories.UsuarioRepository;
-import br.com.meusite.meuprojeto.services.exceptions.ExcecaoDeObjetoNaoEncontrado;
+import br.com.meusite.meuprojeto.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class AutorizacaoServico {
@@ -30,7 +30,7 @@ public class AutorizacaoServico {
 		
 		Usuario usuario = usuarioRepository.findByEmail(email);
 		if (usuario == null) {
-			throw new ExcecaoDeObjetoNaoEncontrado("Email não encontrado");
+			throw new ObjectNotFoundException("Email não encontrado");
 		}
 		
 		String newPass = novaSenha();

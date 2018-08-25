@@ -1,4 +1,5 @@
-package br.com.meusite.meuprojeto.domain;
+package br.com.meusite.meuprojeto.dto;
+
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -6,62 +7,47 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CollectionTable;
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import br.com.meusite.meuprojeto.domain.enums.Perfil;
+import br.com.meusite.meuprojeto.services.validation.UsuarioInsert;
 
-
-@Entity
-public class Usuario implements Serializable {
+@UsuarioInsert
+public class UsuarioNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
 	
+	@NotEmpty(message="Preenchimento obrigatório")
 	private String nome;
 	
-	@Column(unique=true)
+	@NotEmpty(message="Preenchimento obrigatório")
+	@Email(message="Email inválido")
 	private String email;
 	
+	@NotEmpty(message="Preenchimento obrigatório")
 	private String login;
 	
-	@JsonIgnore
+	@NotEmpty(message="Preenchimento obrigatório")
 	private String senha;
 	
 	@ElementCollection(fetch=FetchType.EAGER)
 	@CollectionTable(name="PERFIS")
 	private Set<Integer> perfis = new HashSet<>();
 	
-	public Usuario() {
+	public UsuarioNewDTO() {
 		adicionaPerfil(Perfil.USUARIO);
 	}
 	
 	
-	public Usuario(Integer id, String nome, String email, String login, String senha) {
+	public UsuarioNewDTO(String nome, String email, String login, String senha) {
 		super();
-		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.login = login;
 		this.senha = senha;
 		adicionaPerfil(Perfil.USUARIO);
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public String getNome() {

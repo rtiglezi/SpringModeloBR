@@ -23,11 +23,12 @@ public class DadosParaTeste {
 	
 	public void instanciaBancoDeDadosDeTeste() throws ParseException {
 		
-		Usuario u1 = new Usuario(null, "Ronaldo", "ronaldotonioli@gmail.com", "ronaldotonioli", pe.encode("123"));
+		Usuario u1 = new Usuario(null, "Ronaldo", "ronaldotonioli@gmail.com", "ronaldotonioli", pe.encode("12345678"));
 		u1.adicionaPerfil(Perfil.ADMIN);
 		
-		Usuario u2 = new Usuario(null, "Marcia", "marciabertti01@hotmail.com", "marciabertti", pe.encode("123"));
+		Usuario u2 = new Usuario(null, "Marcia", "marciabertti01@hotmail.com", "marciabertti", pe.encode("12345678"));
 		usuarioRepository.saveAll(Arrays.asList(u1, u2));
+		
 		
 	}
 }
