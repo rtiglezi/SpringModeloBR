@@ -1,4 +1,4 @@
-package com.rtiglezi.upmoney;
+package br.com.meusite.meuprojeto;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UpmoneyApplicationTests {
+public class MeuProjetoApplicationTests {
 
 	@Test
 	public void contextLoads() {

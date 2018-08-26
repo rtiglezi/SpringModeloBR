@@ -11,7 +11,7 @@ import br.com.meusite.meuprojeto.repositories.UsuarioRepository;
 import br.com.meusite.meuprojeto.security.UserSS;
 
 @Service
-public class ImplementacaoUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private UsuarioRepository repo;

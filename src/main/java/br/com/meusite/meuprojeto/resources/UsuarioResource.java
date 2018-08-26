@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.meusite.meuprojeto.domain.Usuario;
 import br.com.meusite.meuprojeto.dto.UsuarioDTO;
-import br.com.meusite.meuprojeto.dto.UsuarioNewDTO;
 import br.com.meusite.meuprojeto.services.UsuarioService;
 
 @Controller
@@ -28,6 +27,8 @@ public class UsuarioResource {
 	
 	@Autowired
 	private UsuarioService service;
+	
+	
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.GET)
@@ -43,9 +44,11 @@ public class UsuarioResource {
 	}
 	
 	
+	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioNewDTO objDto) {
-		Usuario obj = service.fromDTO(objDto);
+	public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioDTO objDto) {
+		Usuario obj = service.fromInsertDTO(objDto);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -53,13 +56,17 @@ public class UsuarioResource {
 	}
 	
 	
+	
+	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody UsuarioDTO objDto, @PathVariable Integer id) {
-		Usuario obj = service.fromDTO(objDto);
+		Usuario obj = service.fromUpdateDTO(objDto);
 		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
+	
+	
 	
 	
 	@PreAuthorize("hasAnyRole('ADMIN')")

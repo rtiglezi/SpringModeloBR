@@ -7,24 +7,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import br.com.meusite.meuprojeto.services.DadosParaTeste;
+import br.com.meusite.meuprojeto.services.DBService;
 import br.com.meusite.meuprojeto.services.EmailService;
 import br.com.meusite.meuprojeto.services.SmtpEmailService;
 
 @Configuration
 @Profile("test")
-public class AmbienteDeTeste {
+public class TestEnvConfig {
 
 	@Autowired
-	private DadosParaTeste dbService;
+	private DBService dbService;
 	
 	@Bean
-	public boolean instanciaBancoDeDados() throws ParseException {
-		dbService.instanciaBancoDeDadosDeTeste();
+	public boolean instantiateDatabase() throws ParseException {
+		dbService.instantiateInicialTestData();
 		return true;
 	}
 	
-	@Bean EmailService emailService() {
+	@Bean 
+	EmailService emailService() {
 		return new SmtpEmailService();
 	}
 	

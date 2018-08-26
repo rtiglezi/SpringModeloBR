@@ -4,9 +4,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import br.com.meusite.meuprojeto.security.UserSS;
 
-public class IdentificacaoDeUsuarioLogadoService {
+public class UserService {
 	
-	public static UserSS usuarioLogado() {
+	public static UserSS authenticated() {
 		try {
 			return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		}

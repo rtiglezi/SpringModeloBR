@@ -11,7 +11,7 @@ import br.com.meusite.meuprojeto.repositories.UsuarioRepository;
 import br.com.meusite.meuprojeto.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class AutorizacaoServico {
+public class AuthService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
@@ -26,7 +26,7 @@ public class AutorizacaoServico {
 	
 	private Random rand = new Random();
 	
-	public void enviarNovaSenha(String email) {
+	public void sendNewPassword(String email) {
 		
 		Usuario usuario = usuarioRepository.findByEmail(email);
 		if (usuario == null) {

@@ -14,31 +14,31 @@ import br.com.meusite.meuprojeto.dto.EmailDTO;
 
 import br.com.meusite.meuprojeto.security.JWTUtil;
 import br.com.meusite.meuprojeto.security.UserSS;
-import br.com.meusite.meuprojeto.services.AutorizacaoServico;
-import br.com.meusite.meuprojeto.services.IdentificacaoDeUsuarioLogadoService;
+import br.com.meusite.meuprojeto.services.AuthService;
+import br.com.meusite.meuprojeto.services.UserService;
 
 @RestController
-@RequestMapping(value = "/autorizacao")
-public class AutorizacaoResource {
+@RequestMapping(value = "/auth")
+public class AuthResource {
 
 	@Autowired
 	private JWTUtil jwtUtil;
 	
 	@Autowired
-	private AutorizacaoServico service;
+	private AuthService service;
 	
-	@RequestMapping(value = "/reinicia_token", method = RequestMethod.POST)
-	public ResponseEntity<Void> reiniciaToken(HttpServletResponse response) {
-		UserSS user = IdentificacaoDeUsuarioLogadoService.usuarioLogado();
-		String token = jwtUtil.geraToken(user.getUsername());
+	@RequestMapping(value = "/refresh_token", method = RequestMethod.POST)
+	public ResponseEntity<Void> refreshToken(HttpServletResponse response) {
+		UserSS user = UserService.authenticated();
+		String token = jwtUtil.generateToken(user.getUsername());
 		response.addHeader("Authorization", "Bearer " + token);
 		response.addHeader("access-control-expose-headers", "Authorization");
 		return ResponseEntity.noContent().build();
 	}
 	
-	@RequestMapping(value = "/nova_senha", method = RequestMethod.POST)
-	public ResponseEntity<Void> lembrarSenha(@Valid @RequestBody EmailDTO objDto) {
-		service.enviarNovaSenha(objDto.getEmail());
+	@RequestMapping(value = "/forgot", method = RequestMethod.POST)
+	public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDto) {
+		service.sendNewPassword(objDto.getEmail());
 		return ResponseEntity.noContent().build();
 	}
 	

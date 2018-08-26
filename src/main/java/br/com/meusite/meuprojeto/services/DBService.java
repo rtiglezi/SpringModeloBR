@@ -13,7 +13,7 @@ import br.com.meusite.meuprojeto.repositories.UsuarioRepository;
 
 
 @Service
-public class DadosParaTeste {
+public class DBService {
 
 	@Autowired
 	private BCryptPasswordEncoder pe;
@@ -21,7 +21,7 @@ public class DadosParaTeste {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
-	public void instanciaBancoDeDadosDeTeste() throws ParseException {
+	public void instantiateInicialTestData() throws ParseException {
 		
 		Usuario u1 = new Usuario(null, "Ronaldo", "ronaldotonioli@gmail.com", "ronaldotonioli", pe.encode("12345678"));
 		u1.adicionaPerfil(Perfil.ADMIN);

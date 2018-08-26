@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.meusite.meuprojeto.domain.Usuario;
 import br.com.meusite.meuprojeto.domain.enums.Perfil;
 import br.com.meusite.meuprojeto.dto.UsuarioDTO;
-import br.com.meusite.meuprojeto.dto.UsuarioNewDTO;
 import br.com.meusite.meuprojeto.repositories.UsuarioRepository;
 import br.com.meusite.meuprojeto.security.UserSS;
 import br.com.meusite.meuprojeto.services.exceptions.AuthorizationException;
 import br.com.meusite.meuprojeto.services.exceptions.DataIntegrityException;
 import br.com.meusite.meuprojeto.services.exceptions.ObjectNotFoundException;
+
 
 @Service
 public class UsuarioService {
@@ -29,24 +29,37 @@ public class UsuarioService {
 	@Autowired
 	private BCryptPasswordEncoder pe;
 	
+	
+	
+	private boolean checkReadPermission(Integer id) {
+		UserSS usuario = UserService.authenticated();
+		if (usuario==null || !usuario.temPerfil(Perfil.ADMIN) && !id.equals(usuario.getId())) {
+			throw new AuthorizationException("Usuário sem permissão de acesso a estes dados.");
+		}
+		return true;
+	}
+	
+
+	
+	
 	public List<Usuario> findAll() {
 		return repo.findAll();
 	}
 	
 	public Usuario find(Integer id) {
-
-		UserSS usuario = IdentificacaoDeUsuarioLogadoService.usuarioLogado();
-		
-		if (usuario==null || !usuario.temPerfil(Perfil.ADMIN) && !id.equals(usuario.getId())) {
-			
-			throw new AuthorizationException("Acesso negado");
-		}
-		
+		checkReadPermission(id);
 		Optional<Usuario> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getSimpleName()));
 	}
 	
+	
+		
+	
+	public Usuario fromInsertDTO(UsuarioDTO objDto) {
+		Usuario obj = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getLogin(), objDto.getSenha());
+		return obj;
+	}
 	
 	@Transactional
 	public Usuario insert(Usuario obj) {
@@ -56,17 +69,28 @@ public class UsuarioService {
 		return obj;
 	}
 	
+	
+
+	
+	public Usuario fromUpdateDTO(UsuarioDTO objDto) {
+		return new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), objDto.getLogin(), null);
+	}
+	
 	private void updateData(Usuario newObj, Usuario obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
+		newObj.setLogin(obj.getLogin());
 	}
-	
-	
+		
 	public Usuario update(Usuario obj) {
+		checkReadPermission(obj.getId());
 		Usuario newObj = find(obj.getId());
 		updateData(newObj, obj);
-		return repo.save(newObj);
+		return repo.save(newObj); 
 	}
+	
+		
+	
 	
 	public void delete(Integer id) {
 		find(id);
@@ -76,16 +100,6 @@ public class UsuarioService {
 		catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir porque há registros relacionados");
 		}
-	}
-	
-	
-	public Usuario fromDTO(UsuarioDTO objDto) {
-		return new Usuario(objDto.getId(), objDto.getNome(), objDto.getEmail(), objDto.getLogin(), null);
-	}
-	
-	public Usuario fromDTO(UsuarioNewDTO objDto) {
-		Usuario obj = new Usuario(null, objDto.getNome(), objDto.getEmail(), objDto.getLogin(), objDto.getSenha());
-		return obj;
 	}
 	
 	

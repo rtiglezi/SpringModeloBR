@@ -9,12 +9,12 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.meusite.meuprojeto.domain.Usuario;
-import br.com.meusite.meuprojeto.dto.UsuarioNewDTO;
+import br.com.meusite.meuprojeto.dto.UsuarioDTO;
 import br.com.meusite.meuprojeto.repositories.UsuarioRepository;
 import br.com.meusite.meuprojeto.resources.exceptions.FieldMessage;
 
 
-public class UsuarioInsertValidator implements ConstraintValidator<UsuarioInsert, UsuarioNewDTO> {
+public class UsuarioInsertValidator implements ConstraintValidator<UsuarioInsert, UsuarioDTO> {
 
 	@Autowired
 	private UsuarioRepository repo;
@@ -24,7 +24,7 @@ public class UsuarioInsertValidator implements ConstraintValidator<UsuarioInsert
 	}
 
 	@Override
-	public boolean isValid(UsuarioNewDTO objDto, ConstraintValidatorContext context) {
+	public boolean isValid(UsuarioDTO objDto, ConstraintValidatorContext context) {
 		
 		List<FieldMessage> list = new ArrayList<>();
 		
