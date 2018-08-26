@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,6 +36,17 @@ public class UsuarioResource {
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<Usuario>> findAll() {
 		List<Usuario> list = service.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(value="/page", method=RequestMethod.GET)
+	public ResponseEntity<Page<Usuario>> findPage(
+			@RequestParam(value="page", defaultValue="0") Integer page, 
+			@RequestParam(value="linesPerPage", defaultValue="24") Integer linesPerPage, 
+			@RequestParam(value="direction", defaultValue="ASC") String direction, 
+			@RequestParam(value="orderBy", defaultValue="nome") String orderBy) {
+		Page<Usuario> list = service.findPage(page, linesPerPage, direction, orderBy);
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -75,5 +88,9 @@ public class UsuarioResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+	
+	
+	
 	
 }
