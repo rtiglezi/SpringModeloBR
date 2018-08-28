@@ -58,6 +58,7 @@ public class UsuarioResource {
 	
 	
 	
+	
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody UsuarioDTO objDto) {
@@ -88,9 +89,6 @@ public class UsuarioResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	
-	
 	
 	
 }

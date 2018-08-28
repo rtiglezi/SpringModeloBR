@@ -49,6 +49,11 @@ public class UsuarioService {
 		return repo.findAll();
 	}
 	
+	public Page<Usuario> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		return repo.findAll(pageRequest);		
+	}
+	
 	public Usuario find(Integer id) {
 		checkReadPermission(id);
 		Optional<Usuario> obj = repo.findById(id);
@@ -107,10 +112,7 @@ public class UsuarioService {
 	
 	
 	
-	public Page<Usuario> findPage(Integer page, Integer linesPerPage, String direction, String orderBy) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return repo.findAll(pageRequest);		
-	}
+	
 	
 	
 }

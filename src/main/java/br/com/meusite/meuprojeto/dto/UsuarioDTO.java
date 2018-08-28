@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.Length;
+
 import br.com.meusite.meuprojeto.domain.enums.Perfil;
 import br.com.meusite.meuprojeto.services.validation.UsuarioInsert;
 
@@ -22,13 +24,15 @@ public class UsuarioDTO implements Serializable {
 	private Integer id;
 	
 	@NotEmpty(message="Preenchimento obrigatório")
+	@Length(min=5, max=80, message="O campo deve ter entre 5 e 80 caracteres")
 	private String nome;
 	
 	@NotEmpty(message="Preenchimento obrigatório")
 	@Email(message="Email inválido")
 	private String email;
-	
+			
 	@NotEmpty(message="Preenchimento obrigatório")
+	@Length(min=5, max=15, message="O campo deve ter entre 5 e 15 caracteres")
 	private String login;
 	
 	@NotEmpty(message="Preenchimento obrigatório")
