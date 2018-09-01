@@ -61,6 +61,20 @@ public class UsuarioService {
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Usuario.class.getSimpleName()));
 	}
 	
+	public Usuario findByEmail(String email) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.temPerfil(Perfil.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+	
+		Usuario obj = repo.findByEmail(email);
+		if (obj == null) {
+			throw new ObjectNotFoundException(
+					"Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Usuario.class.getName());
+		}
+		return obj;
+	}
+	
 	
 		
 	
@@ -109,7 +123,11 @@ public class UsuarioService {
 			throw new DataIntegrityException("Não é possível excluir porque há registros relacionados");
 		}
 	}
-	
+
+
+
+
+		
 	
 	
 	
